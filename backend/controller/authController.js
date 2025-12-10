@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const generateToken = require('../utils/GenerateToken');
 
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
+    const {name, email, password } = req.body;
 
     try {
         const exists = await User.findOne({ email });
@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
         }
 
         const hashed = await bcrypt.hash(password, 10);
-        const user = await User.create({ email, password: hashed });
+        const user = await User.create({ name, email, password: hashed });
 
         res.json({
             token: generateToken(user._id), 
@@ -48,6 +48,7 @@ const loginUser = async (req, res ) => {
 const getMe = async (req, res) => {
     res.json({
         id: req.user._id,
+        name: req.user.name,
         email: req.user.email,
     });
 };

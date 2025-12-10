@@ -1,4 +1,4 @@
-const Offer = require('../models/offerModel');
+const Offer = require('../models/Offer');
 
 // Create a new offer
 const createOffer = async (req, res) => {
@@ -23,7 +23,7 @@ const createOffer = async (req, res) => {
 // Get all offers
 const getOffers = async (req, res) => {
     try {
-        const offers = await Offer.find().populate('user', 'email');
+        const offers = await Offer.find().populate('user');
         res.json(offers);
     } catch (error) {
         res.status(500).json({ message: error.message });
