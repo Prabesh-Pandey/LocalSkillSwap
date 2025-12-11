@@ -27,3 +27,24 @@ const createBooking = async (req, res) =>{
     }
 };
 
+// get my bookings (I requested)
+const getMyBookings = async (req, res) =>{
+    try {
+        const bookings = await Booking.find({ bookedBy: req.user._id }).populate('offer').populate('offerOwner', 'name email');
+        res.status(200).json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// get bookings received for my offers
+const  getReceivedBookings = async (req, res) =>{
+    try {
+        const bookings = await Booking.find({ offerOwner : req.user._id})
+        .populate("offer")
+        .populate("bookedBy", "name email");
+        res.status(200).json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
