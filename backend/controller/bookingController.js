@@ -48,3 +48,55 @@ const  getReceivedBookings = async (req, res) =>{
         res.status(500).json({ error: error.message });
     }
 };
+
+// update booking status (accept/reject)
+const updateBooking = async (req, res) =>{
+    try {
+        const { status } = req.body;
+        
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        if (booking.offerOwner.toString() !== req.user._id.toString()){
+            return res.status(403).json({ message: 'Not authorized to update this booking' });
+        }
+
+        booking.status = status;
+        await booking.save();
+
+        res.status(200).json(booking);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+//cancel booking (by requester)
+const cancelBooking = async (req, res) =>{
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        if (booking.bookedBy.toString() !== req.user._id.toString()){
+            return res.status(403).json({ message: 'Not authorized to cancel this booking' });
+        }
+
+        booking.status = 'cancelled';
+        await booking.save();
+
+        res.status(200).json(booking);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = {
+    createBooking,
+    getMyBookings,
+    getReceivedBookings,
+    updateBooking,
+    cancelBooking
+};
