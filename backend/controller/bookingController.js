@@ -1,4 +1,5 @@
 const Booking = require('../models/Booking');
+const Notification = require('../models/Notification');
 const Offer = require('../models/Offer');
 
 //create booking
@@ -20,6 +21,14 @@ const createBooking = async (req, res) =>{
             bookedBy: req.user._id,
             offerOwner: offer.user,
             message
+        });
+
+        // Create a notification for the offer owner
+        await Notification.create({
+            user: offer.user,
+            type: 'booking',
+            message: `You have a new booking request for your offer: ${offer.title} , from ${req.user.name}.`,
+            link: `/offers/${offer._id}`,
         });
         res.status(201).json(booking);
     } catch (error) {
@@ -66,6 +75,12 @@ const updateBooking = async (req, res) =>{
         booking.status = status;
         await booking.save();
 
+        await Notification.create({
+            user: booking.bookedBy,
+            type: 'booking_status',
+            message: `Your booking for "${booking.offer.title}" was ${booking.status}`,
+            link: `/bookings/${booking._id}`,
+        });
         res.status(200).json(booking);
     } catch (error) {
         res.status(500).json({ error: error.message });

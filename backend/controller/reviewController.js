@@ -1,5 +1,6 @@
 const Review = require('../models/Review');
 const Offer = require('../models/Offer');
+const Notification = require('../models/Notification');
 
 // create review
 const createReview = async (req, res) => {
@@ -32,6 +33,13 @@ const createReview = async (req, res) => {
             user: req.user._id,
             rating,
             comment
+        });
+
+        await Notification.create({
+            user: offer.user,
+            type: 'review',
+            message: `Your offer "${offer.title}" received a new review from ${req.user.name}.`,
+            link: `/offers/${offer._id}`,
         });
 
         await updateOfferRating(offerId);
