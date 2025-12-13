@@ -23,6 +23,14 @@ const offerSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    averageRating: {
+        type: Number,
+        default: 0,
+    },
+    numReviews: {
+        type: Number,
+        default: 0,
+    },
 },
 { timestamps: true}
 );

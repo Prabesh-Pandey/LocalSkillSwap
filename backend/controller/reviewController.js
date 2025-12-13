@@ -34,6 +34,8 @@ const createReview = async (req, res) => {
             comment
         });
 
+        await updateOfferRating(offerId);
+
         const populatedReview = await review.populate('user', 'name email');
 
         res.status(201).json(populatedReview);
@@ -55,7 +57,19 @@ const getReviewsByOffer = async (req, res) => {
     }
 };
 
+const updateOfferRating = async (offerId) => {
+    const reviews = await Review.find({ offer: offerId });
+    const numReviews = reviews.length;
+    const averageRating = 
+    numReviews === 0 ? 0 
+    : reviews.reduce((sum,r) => r.rating + sum, 0) / numReviews;
+
+    await Offer.findByIdAndUpdate(offerId, {
+        numReviews,
+        averageRating: averageRating.toFixed(1),
+    });
+};
 module.exports = {
     createReview,
-    getReviewsByOffer
+    getReviewsByOffer,
 };
