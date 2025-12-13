@@ -26,8 +26,48 @@ const createOffer = async (req, res) => {
 // Get all offers
 const getOffers = async (req, res) => {
     try {
-        const offers = await Offer.find().populate('user', 'name email');
-        res.json(offers);
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const keywords = req.query.keywords
+            ? {
+                  title: {
+                      $regex: req.query.keywords,
+                      $options: 'i'
+                  },
+              }
+            : {};
+
+            const priceFilter = {
+                ...(req.query.minPrice && { price: { $gte: Number(req.query.minPrice) } }),
+                ...(req.query.maxPrice && { price: { $lte: Number(req.query.maxPrice) } }),
+            };
+
+            const tagsFilter = req.query.tags
+                ? { tags: req.query.tag}
+                : {};
+
+            const filter = {
+                ...keywords,
+                ...priceFilter,
+                ...tagsFilter
+            };
+
+            const total = await Offer.countDocuments(filter);
+
+            const offers = await Offer.find(filter)
+                .populate('user', 'name email')
+                .limit(limit)
+                .skip(skip)
+                .sort({ createdAt: -1 });
+
+        res.json({
+            offers,
+            page,
+            pages: Math.ceil(total / limit),
+            total
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
