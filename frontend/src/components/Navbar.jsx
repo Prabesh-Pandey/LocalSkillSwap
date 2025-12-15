@@ -50,6 +50,8 @@ const Navbar = () => {
                         <span>Hello, {user.name}</span>{" | "}
                         <Link to="/my-bookings">My Bookings</Link>{" | "}
                         <Link to="/owner-bookings">Bookings</Link>{" | "}
+                        <Link to="/profile">Profile</Link>{" | "}
+
                         <button onClick={logout}>Logout</button>
                     </>
                 ) : (

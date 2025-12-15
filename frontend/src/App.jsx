@@ -11,6 +11,7 @@ import CreateOffer from "./pages/CreateOffer";
 import OwnerBookings from "./pages/OwnerBookings";
 import MyBookings from "./pages/MyBooking";
 import OfferDetails from "./pages/OfferDetails";
+import Profile from "./pages/Profile";
 
 function App() {
     return (
@@ -65,6 +66,15 @@ element={
 }
 />
 <Route path="/offers" element={<Offers />} />
+
+<Route
+    path="/profile"
+    element={
+        <ProtectedRoute>
+            <Profile />
+        </ProtectedRoute>
+    }
+/>
 
                 </Routes>
             </AuthProvider>
