@@ -12,6 +12,7 @@ import OwnerBookings from "./pages/OwnerBookings";
 import MyBookings from "./pages/MyBooking";
 import OfferDetails from "./pages/OfferDetails";
 import Profile from "./pages/Profile";
+import EditOffer from "./pages/EditOffer";
 
 function App() {
     return (
@@ -72,6 +73,15 @@ element={
     element={
         <ProtectedRoute>
             <Profile />
+        </ProtectedRoute>
+    }
+/>
+
+<Route
+    path="/offers/:id/edit"
+    element={
+        <ProtectedRoute>
+            <EditOffer />
         </ProtectedRoute>
     }
 />

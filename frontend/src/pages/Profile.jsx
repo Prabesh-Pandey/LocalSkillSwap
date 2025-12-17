@@ -7,12 +7,22 @@ const Profile = () => {
     const { user } = useAuth();
 
     const [offers, setOffers] = useState([]);
-    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         api.get("/offers/myoffers").then((res) => setOffers(res.data));
         // api.get("/reviews/offer/:offerId").then((res) => setReviews(res.data));
     }, []);
+
+    const handleDeleteOffer = async (offerId) => {
+        if (!window.confirm("Are you sure you want to delete this offer?")) return;
+
+        try {
+            await api.delete(`/offers/${offerId}`);
+            setOffers((prev) => prev.filter((o) => o._id !== offerId));
+        } catch (err) {
+            alert(err.response?.data?.message || "Delete failed");
+        }
+    };
 
     return (
         <div>
@@ -30,6 +40,8 @@ const Profile = () => {
             <h3>My Offers</h3>
             {offers.length === 0 && <p>You haven’t created any offers.</p>}
 
+            
+
             {offers.map((offer) => (
                 <div key={offer._id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
                     <h4>
@@ -39,6 +51,18 @@ const Profile = () => {
                     </h4>
                     <p>Price: {offer.price}</p>
                     <p>⭐ {offer.averageRating} ({offer.numReviews})</p>
+
+                    <div style={{ marginTop: "10px" }}>
+                        <Link to={`/offers/${offer._id}/edit`}>
+                            <button>Edit</button>
+                        </Link>
+                        <button
+                            onClick={() => handleDeleteOffer(offer._id)}
+                            style={{ marginLeft: "10px" }}
+                        >
+                            Delete
+                        </button>
+                    </div>
                 </div>
             ))}
 
