@@ -1,77 +1,109 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import "./CreateOffer.css";
 
 const CreateOffer = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [tags, setTags] = useState("");
-    const [error, setError] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [tags, setTags] = useState("");
+  const [error, setError] = useState("");
 
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        setError("");
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setError("");
 
-        try {
-            const offerData = {
-                title,
-                description,
-                price: Number(price),
-                tags: tags.split(",").map((tag) => tag.trim()),
-            };
+    try {
+      const offerData = {
+        title,
+        description,
+        price: Number(price),
+        tags: tags.split(",").map((tag) => tag.trim()),
+      };
 
-            await api.post("/offers", offerData);
-            navigate("/"); // go back to offers list
-        } catch (err) {
-            setError(err.response?.data?.message || "Failed to create offer");
-        }
-    };
+      await api.post("/offers", offerData);
+      navigate("/profile"); // go to profile to see created offer
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create offer");
+    }
+  };
 
-    return (
-        <form
-            onSubmit={submitHandler}
-            style={{ maxWidth: "500px", margin: "40px auto" }}
-        >
-            <h2>Create Offer</h2>
+  return (
+    <div className="create-offer-page">
+      <div className="create-offer-container">
+        <div className="create-offer-card">
+          <h2>Create New Offer</h2>
 
-            {error && <p style={{ color: "red" }}>{error}</p>}
+          {error && <div className="error-message">{error}</div>}
 
-            <input
+          <form onSubmit={submitHandler} className="create-offer-form">
+            <div className="form-group">
+              <label>Title</label>
+              <input
                 type="text"
-                placeholder="Title"
+                placeholder="e.g., Web Development Tutoring"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-            />
+              />
+            </div>
 
-            <textarea
-                placeholder="Description"
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                placeholder="Describe what you're offering..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
-            />
+              />
+              <small>Be specific about what you'll teach or help with</small>
+            </div>
 
-            <input
+            <div className="form-group">
+              <label>Price ($)</label>
+              <input
                 type="number"
-                placeholder="Price"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
-            />
+              />
+              <small>Price per hour or session</small>
+            </div>
 
-            <input
+            <div className="form-group">
+              <label>Tags (Optional)</label>
+              <input
                 type="text"
-                placeholder="Tags (comma separated)"
+                placeholder="e.g., programming, javascript, react"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
-            />
+              />
+              <small>Separate tags with commas</small>
+            </div>
 
-            <button type="submit">Create</button>
-        </form>
-    );
+            <div className="form-actions">
+              <button type="submit" className="btn-submit">
+                Create Offer
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => navigate("/profile")}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default CreateOffer;
