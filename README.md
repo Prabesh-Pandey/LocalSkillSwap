@@ -98,7 +98,7 @@ cd backend
 npm install
 
 # Create .env file
-cp .env.example .env
+touch .env
 ```
 
 Configure your `.env` file with the following variables:
