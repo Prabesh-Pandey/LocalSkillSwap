@@ -15,81 +15,74 @@ import Profile from "./pages/Profile";
 import EditOffer from "./pages/EditOffer";
 
 function App() {
-    return (
-        <BrowserRouter>
-            <AuthProvider>
-                <Navbar />
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-                    <Route path="/" element={<Offers />} />
+          <Route path="/" element={<Offers />} />
 
-                    <Route
-                        path="/notifications"
-                        element={
-                            <ProtectedRoute>
-                                <Notifications />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-    path="/create-offer"
-    element={
-        <ProtectedRoute>
-            <CreateOffer />
-            
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/owner-bookings"
-    element={
-        <ProtectedRoute>
-            <OwnerBookings />
-        </ProtectedRoute>
-    }
-/>
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <Notifications />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-offer"
+            element={
+              <ProtectedRoute>
+                <CreateOffer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/owner-bookings"
+            element={
+              <ProtectedRoute>
+                <OwnerBookings />
+              </ProtectedRoute>
+            }
+          />
 
-<Route
-    path="/my-bookings"
-    element={
-        <ProtectedRoute>
-            <MyBookings />
-        </ProtectedRoute>
-    }
-/>
+          <Route
+            path="/my-bookings"
+            element={
+              <ProtectedRoute>
+                <MyBookings />
+              </ProtectedRoute>
+            }
+          />
 
-<Route 
-path="/offers/:id" 
-element={
-<OfferDetails />
-}
-/>
-<Route path="/offers" element={<Offers />} />
+          <Route path="/offers/:id" element={<OfferDetails />} />
+          <Route path="/offers" element={<Offers />} />
 
-<Route
-    path="/profile"
-    element={
-        <ProtectedRoute>
-            <Profile />
-        </ProtectedRoute>
-    }
-/>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
-<Route
-    path="/offers/:id/edit"
-    element={
-        <ProtectedRoute>
-            <EditOffer />
-        </ProtectedRoute>
-    }
-/>
-
-                </Routes>
-            </AuthProvider>
-        </BrowserRouter>
-    );
+          <Route
+            path="/offers/:id/edit"
+            element={
+              <ProtectedRoute>
+                <EditOffer />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
 export default App;

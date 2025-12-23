@@ -1,0 +1,218 @@
+.offer-details-page {
+  padding: 2rem 0;
+  min-height: calc(100vh - 80px);
+}
+
+.offer-details-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.back-button {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.offer-details-card {
+  background-color: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+
+.offer-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.offer-header h1 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.offer-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.offer-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.offer-price-large {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.offer-body {
+  margin-bottom: 2rem;
+}
+
+.offer-body h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.offer-body p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.offer-owner-info {
+  background-color: var(--bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.offer-owner-info h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.offer-owner-info p {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.offer-actions-section {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.offer-actions-section button {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Reviews Section */
+.reviews-section {
+  background-color: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.reviews-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.reviews-header h2 {
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.reviews-summary {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.review-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.review-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.review-rating {
+  color: var(--warning-color);
+  font-weight: 500;
+}
+
+.review-comment {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.review-date {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .offer-details-card {
+    padding: 1.5rem;
+  }
+
+  .offer-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .offer-meta {
+    gap: 1rem;
+  }
+
+  .offer-price-large {
+    font-size: 1.5rem;
+  }
+
+  .offer-actions-section {
+    flex-direction: column;
+  }
+
+  .offer-actions-section button {
+    width: 100%;
+  }
+}

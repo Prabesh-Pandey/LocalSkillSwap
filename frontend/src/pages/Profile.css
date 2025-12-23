@@ -1,0 +1,137 @@
+.profile-page {
+  padding: 2rem 0;
+  min-height: calc(100vh - 80px);
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.profile-header {
+  background-color: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.profile-header h1 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.profile-header p {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+.profile-section {
+  background-color: white;
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+
+.profile-section h2 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.offers-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.offer-item {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s;
+}
+
+.offer-item:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateX(4px);
+}
+
+.offer-item h3 {
+  color: var(--text-primary);
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.offer-item p {
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.offer-info {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.offer-info-item {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.offer-info-item strong {
+  color: var(--text-primary);
+}
+
+.offer-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.offer-actions button,
+.offer-actions a {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.no-offers-message {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+}
+
+.create-offer-btn {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-section {
+    padding: 1.5rem;
+  }
+
+  .offer-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .offer-actions {
+    flex-direction: column;
+  }
+
+  .offer-actions button,
+  .offer-actions a {
+    width: 100%;
+  }
+}
