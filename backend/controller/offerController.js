@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Offer = require('../models/Offer');
 
 // Create a new offer
@@ -29,45 +30,46 @@ const getOffers = async (req, res) => {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
-
-        const keywords = req.query.keywords
-            ? {
-                  title: {
-                      $regex: req.query.keywords,
-                      $options: 'i'
-                  },
-              }
+        // Search by keyword (frontend sends `keyword`)
+        const keywords = req.query.keyword
+            ? { title: { $regex: req.query.keyword, $options: 'i' } }
             : {};
 
-            const priceFilter = {
-                ...(req.query.minPrice && { price: { $gte: Number(req.query.minPrice) } }),
-                ...(req.query.maxPrice && { price: { $lte: Number(req.query.maxPrice) } }),
-            };
+        // Filter by minimum rating (averageRating)
+        const ratingFilter = req.query.minRating
+            ? { averageRating: { $gte: Number(req.query.minRating) } }
+            : {};
 
-            const tagsFilter = req.query.tags
-                ? { tags: req.query.tag}
-                : {};
+        // Price filter: merge min and max into a single price object
+        const priceFilter = {};
+        if (req.query.minPrice) {
+            priceFilter.price = { ...(priceFilter.price || {}), $gte: Number(req.query.minPrice) };
+        }
+        if (req.query.maxPrice) {
+            priceFilter.price = { ...(priceFilter.price || {}), $lte: Number(req.query.maxPrice) };
+        }
 
-            const filter = {
-                ...keywords,
-                ...priceFilter,
-                ...tagsFilter
-            };
+        // Tags: accept comma-separated list in `tags` query param
+        const tagsFilter = req.query.tags
+            ? { tags: { $in: req.query.tags.split(',') } }
+            : {};
 
-            const total = await Offer.countDocuments(filter);
+        const filter = {
+            ...keywords,
+            ...ratingFilter,
+            ...priceFilter,
+            ...tagsFilter,
+        };
 
-            const offers = await Offer.find(filter)
-                .populate('user', 'name email')
-                .limit(limit)
-                .skip(skip)
-                .sort({ createdAt: -1 });
+        const total = await Offer.countDocuments(filter);
 
-        res.json({
-            offers,
-            page,
-            pages: Math.ceil(total / limit),
-            total
-        });
+        const offers = await Offer.find(filter)
+            .populate('user', 'name email')
+            .limit(limit)
+            .skip(skip)
+            .sort({ createdAt: -1 });
+
+        res.json({ offers, page, pages: Math.ceil(total / limit), total });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -123,6 +125,10 @@ const updateOffer = async (req, res) => {
 // Delete an offer by ID
 const deleteOffer = async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ message: 'Invalid offer id' });
+        }
+
         const offer = await Offer.findById(req.params.id);
         if (!offer) {
             return res.status(404).json({ message: 'Offer not found' });
