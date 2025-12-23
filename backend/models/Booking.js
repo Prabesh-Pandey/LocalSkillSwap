@@ -6,12 +6,12 @@ const bookingSchema = new mongoose.Schema({
         ref: 'Offer',
         required: true
     },
-    bookedBy:{
+     offerOwner:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    offerOwner:{
+      bookedBy:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true

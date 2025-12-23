@@ -39,7 +39,7 @@ const createBooking = async (req, res) =>{
 // get my bookings (I requested)
 const getMyBookings = async (req, res) =>{
     try {
-        const bookings = await Booking.find({ bookedBy: req.user._id }).populate('offer').populate('offerOwner', 'name email');
+        const bookings = await Booking.find({ bookedBy: req.user._id }).populate('offer').populate("offerOwner", "name email");
         res.status(200).json(bookings);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -63,7 +63,7 @@ const updateBooking = async (req, res) =>{
     try {
         const { status } = req.body;
         
-        const booking = await Booking.findById(req.params.id);
+        const booking = await Booking.findById(req.params.id).populate('offer').populate('bookedBy', 'name email');
         if (!booking) {
             return res.status(404).json({ message: 'Booking not found' });
         }
@@ -75,12 +75,15 @@ const updateBooking = async (req, res) =>{
         booking.status = status;
         await booking.save();
 
-        await Notification.create({
-            user: booking.bookedBy,
-            type: 'booking_status',
-            message: `Your booking for "${booking.offer.title}" was ${booking.status}`,
-            link: `/bookings/${booking._id}`,
-        });
+        if (booking.offer) {
+            await Notification.create({
+                user: booking.bookedBy,
+                type: 'booking_status',
+                message: `Your booking for "${booking.offer.title}" was ${booking.status}`,
+                link: `/bookings/${booking._id}`,
+            });
+        }
+        
         res.status(200).json(booking);
     } catch (error) {
         res.status(500).json({ error: error.message });

@@ -1,6 +1,7 @@
 const Review = require('../models/Review');
 const Offer = require('../models/Offer');
 const Notification = require('../models/Notification');
+const Booking = require('../models/Booking');
 
 // create review
 const createReview = async (req, res) => {
@@ -20,7 +21,7 @@ const createReview = async (req, res) => {
         // condition (review only accepted offers)
         const booking = await Booking.findOne({ 
             offer: offerId, 
-            user: req.user._id, 
+            bookedBy: req.user._id,
             status: 'accepted' 
         });
 
@@ -74,8 +75,9 @@ const updateOfferRating = async (offerId) => {
 
     await Offer.findByIdAndUpdate(offerId, {
         numReviews,
-        averageRating: averageRating.toFixed(1),
+        averageRating: Number(averageRating.toFixed(1)),
     });
+
 };
 module.exports = {
     createReview,

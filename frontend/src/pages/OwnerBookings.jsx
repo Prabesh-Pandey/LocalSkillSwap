@@ -8,7 +8,11 @@ const OwnerBookings = () => {
 
   useEffect(() => {
     api.get("/bookings/received").then((res) => {
-      setBookings(res.data);
+      // Sort bookings by createdAt in descending order (latest first)
+      const sortedBookings = res.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setBookings(sortedBookings);
       setLoading(false);
     });
   }, []);

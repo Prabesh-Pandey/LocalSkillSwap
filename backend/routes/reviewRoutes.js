@@ -4,7 +4,8 @@ const protect = require('../middleware/authMiddleware');
 
 const {
         createReview,
-    getReviewsByOffer
+    getReviewsByOffer,
+    getReviewByUser
 } = require('../controller/reviewController');
 
 // Protected route

@@ -15,8 +15,10 @@ const registerUser = async (req, res) => {
         const user = await User.create({ name, email, password: hashed });
 
         res.json({
-            token: generateToken(user._id), 
-            message: {userid: user._id, email: user.email}
+            token: generateToken(user._id),
+            id: user._id,
+            name: user.name,
+            email: user.email,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -39,6 +41,9 @@ const loginUser = async (req, res ) => {
 
         res.json({
             token: generateToken(user._id),
+            id: user._id,
+            name: user.name,
+            email: user.email,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
