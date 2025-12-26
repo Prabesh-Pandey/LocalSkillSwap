@@ -8,7 +8,7 @@
 
 .auth-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
 }
 
 .auth-card {
@@ -22,8 +22,15 @@
 .auth-card h2 {
   text-align: center;
   color: var(--text-primary);
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   font-size: 1.75rem;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
 }
 
 .auth-form {
@@ -58,6 +65,152 @@
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+.form-group input:disabled {
+  background-color: var(--bg-secondary);
+  cursor: not-allowed;
+}
+
+.form-group input.input-success {
+  border-color: #10b981;
+}
+
+.form-group input.input-success:focus {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-group input.input-error {
+  border-color: #ef4444;
+}
+
+.form-group input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Password Input Wrapper */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 4rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.password-toggle:hover {
+  color: var(--primary-color);
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.strength-bar-container {
+  flex: 1;
+  height: 4px;
+  background-color: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 50px;
+}
+
+/* Password Requirements */
+.password-requirements {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.password-requirements .requirements-title {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.password-requirements ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1rem;
+}
+
+.password-requirements li {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.password-requirements li::before {
+  content: "○";
+  font-size: 0.5rem;
+}
+
+.password-requirements li.met {
+  color: #10b981;
+}
+
+.password-requirements li.met::before {
+  content: "●";
+}
+
+/* Input Feedback */
+.input-feedback {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.input-feedback.success {
+  color: #10b981;
+}
+
+.input-feedback.error {
+  color: #ef4444;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
 .auth-submit-btn {
   padding: 0.875rem;
   background-color: var(--primary-color);
@@ -71,10 +224,16 @@
   margin-top: 0.5rem;
 }
 
-.auth-submit-btn:hover {
+.auth-submit-btn:hover:not(:disabled) {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.auth-submit-btn:disabled {
+  background-color: var(--text-secondary);
+  cursor: not-allowed;
+  transform: none;
 }
 
 .auth-footer {
@@ -101,5 +260,9 @@
 
   .auth-card h2 {
     font-size: 1.5rem;
+  }
+
+  .password-requirements ul {
+    grid-template-columns: 1fr;
   }
 }
