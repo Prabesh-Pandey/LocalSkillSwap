@@ -6,13 +6,26 @@ import "./Login.css";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    await login(email, password);
-    navigate("/");
+    setError("");
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -20,6 +33,9 @@ const Login = () => {
       <div className="auth-container">
         <div className="auth-card">
           <h2>Login</h2>
+
+          {error && <div className="error-message">{error}</div>}
+
           <form onSubmit={submitHandler} className="auth-form">
             <div className="form-group">
               <label>Email</label>
@@ -29,6 +45,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
             <div className="form-group">
@@ -39,10 +56,15 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
-            <button type="submit" className="auth-submit-btn">
-              Login
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
           <div className="auth-footer">

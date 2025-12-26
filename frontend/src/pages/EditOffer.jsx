@@ -10,41 +10,66 @@ const EditOffer = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [tags, setTags] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    api.get(`/offers/${id}`).then((res) => {
-      setTitle(res.data.title);
-      setDescription(res.data.description);
-      setPrice(res.data.price);
-      setLoading(false);
-    });
+    const fetchOffer = async () => {
+      try {
+        const { data } = await api.get(`/offers/${id}`);
+        setTitle(data.title);
+        setDescription(data.description);
+        setPrice(data.price);
+        setTags(data.tags?.join(", ") || "");
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to load offer");
+        setLoading(false);
+      }
+    };
+    fetchOffer();
   }, [id]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setError("");
+    setSubmitting(true);
 
     try {
       await api.put(`/offers/${id}`, {
         title,
         description,
-        price,
+        price: Number(price),
+        tags: tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
       });
 
-      alert("Offer updated");
       navigate(`/offers/${id}`);
     } catch (err) {
-      alert("Update failed");
+      setError(err.response?.data?.message || "Update failed");
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="create-offer-page">
+        <p>Loading...</p>
+      </div>
+    );
 
   return (
     <div className="create-offer-page">
       <div className="create-offer-container">
         <div className="create-offer-card">
           <h2>Edit Offer</h2>
+
+          {error && <div className="error-message">{error}</div>}
 
           <form className="create-offer-form" onSubmit={submitHandler}>
             <div className="form-group">
@@ -55,6 +80,7 @@ const EditOffer = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter offer title"
                 required
+                disabled={submitting}
               />
             </div>
 
@@ -65,28 +91,50 @@ const EditOffer = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your offer"
                 required
+                disabled={submitting}
               />
             </div>
 
             <div className="form-group">
-              <label>Price</label>
+              <label>Price ($)</label>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Enter price"
+                step="0.01"
+                min="0"
                 required
+                disabled={submitting}
               />
+              <small>Price per hour or session</small>
+            </div>
+
+            <div className="form-group">
+              <label>Tags (Optional)</label>
+              <input
+                type="text"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="e.g., programming, javascript, react"
+                disabled={submitting}
+              />
+              <small>Separate tags with commas</small>
             </div>
 
             <div className="form-actions">
-              <button className="btn-submit" type="submit">
-                Update
+              <button
+                className="btn-submit"
+                type="submit"
+                disabled={submitting}
+              >
+                {submitting ? "Updating..." : "Update"}
               </button>
               <button
                 className="btn-cancel"
                 type="button"
                 onClick={() => navigate(`/offers/${id}`)}
+                disabled={submitting}
               >
                 Cancel
               </button>

@@ -37,7 +37,8 @@
 .navbar-search {
   flex: 0 1 auto;
   min-width: 250px;
-  max-width: 400px;
+  max-width: 500px;
+  position: relative;
 }
 
 .navbar-search form {
@@ -65,7 +66,7 @@
 }
 
 .navbar-search button {
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1rem;
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -79,6 +80,63 @@
 
 .navbar-search button:hover {
   background-color: var(--primary-hover);
+}
+
+.navbar-search .btn-filters {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.navbar-search .btn-filters:hover {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.advanced-filters {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-top: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.advanced-filters .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.advanced-filters .filter-group label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.advanced-filters .filter-group input {
+  width: 100px;
+  padding: 0.5rem;
+}
+
+.advanced-filters .btn-clear {
+  background-color: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  padding: 0.5rem 1rem;
+}
+
+.advanced-filters .btn-clear:hover {
+  background-color: var(--danger-color);
+  color: white;
 }
 
 .navbar-links {
@@ -108,6 +166,26 @@
 .navbar-links a:hover {
   color: var(--primary-color);
   text-decoration: none;
+}
+
+.notification-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notification-link .notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background-color: var(--danger-color);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
 }
 
 .navbar-links button {
@@ -174,5 +252,9 @@
     justify-content: center;
     flex-wrap: wrap;
     margin-left: 0;
+  }
+
+  .advanced-filters {
+    flex-wrap: wrap;
   }
 }

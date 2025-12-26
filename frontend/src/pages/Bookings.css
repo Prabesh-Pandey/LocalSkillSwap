@@ -85,9 +85,14 @@
   color: #92400e;
 }
 
-.booking-status.confirmed {
+.booking-status.accepted {
   background-color: #d1fae5;
   color: #065f46;
+}
+
+.booking-status.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 .booking-status.cancelled {
@@ -189,22 +194,53 @@
   margin-bottom: 1rem;
 }
 
+.no-bookings p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
 .no-bookings a {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
-  color: white;
+  color: var(--primary-color);
   text-decoration: none;
-  border-radius: var(--radius);
   font-weight: 500;
-  transition: all 0.2s;
 }
 
 .no-bookings a:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  text-decoration: underline;
+}
+
+.booking-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.booking-status-message {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+}
+
+.booking-status-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.booking-status-message.success a {
+  color: #065f46;
+  font-weight: 500;
+}
+
+.booking-status-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.booking-status-message.warning {
+  background-color: #fef3c7;
+  color: #92400e;
 }
 
 @media (max-width: 768px) {

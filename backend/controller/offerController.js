@@ -6,17 +6,34 @@ const createOffer = async (req, res) => {
     try {
         const { title, description, price, tags } = req.body;
 
+        // Input validation
+        if (!title || !description || price === undefined) {
+            return res.status(400).json({ message: 'Please provide title, description, and price' });
+        }
+
+        if (title.trim().length < 3) {
+            return res.status(400).json({ message: 'Title must be at least 3 characters long' });
+        }
+
+        if (description.trim().length < 10) {
+            return res.status(400).json({ message: 'Description must be at least 10 characters long' });
+        }
+
+        if (isNaN(price) || Number(price) < 0) {
+            return res.status(400).json({ message: 'Price must be a valid positive number' });
+        }
+
         const offer = await Offer.create({
             user: req.user._id,
-            title,
-            description,
-            price,
-            tags
+            title: title.trim(),
+            description: description.trim(),
+            price: Number(price),
+            tags: Array.isArray(tags) ? tags.map(t => t.trim()).filter(Boolean) : []
         });
 
         const populatedOffer = await offer.populate("user", "name email");
 
-        res.json(populatedOffer);
+        res.status(201).json(populatedOffer);
 
     } catch (error) {
         res.status(500).json({ message: error.message });

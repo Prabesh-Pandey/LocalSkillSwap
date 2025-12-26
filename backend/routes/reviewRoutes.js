@@ -3,9 +3,8 @@ const router = express.Router();
 const protect = require('../middleware/authMiddleware');
 
 const {
-        createReview,
+    createReview,
     getReviewsByOffer,
-    getReviewByUser
 } = require('../controller/reviewController');
 
 // Protected route

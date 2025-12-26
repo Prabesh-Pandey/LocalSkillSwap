@@ -4,26 +4,77 @@ import "./Notifications.css";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get("/notifications").then((res) => setNotifications(res.data));
+    const fetchNotifications = async () => {
+      try {
+        const { data } = await api.get("/notifications");
+        setNotifications(data);
+      } catch (err) {
+        setError("Failed to load notifications");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNotifications();
   }, []);
 
   const markRead = async (id) => {
-    await api.put(`/notifications/${id}/read`);
-    setNotifications((prev) =>
-      prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
-    );
+    try {
+      await api.put(`/notifications/${id}/read`);
+      setNotifications((prev) =>
+        prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
+      );
+    } catch (err) {
+      // Ignore errors
+    }
   };
+
+  const markAllRead = async () => {
+    try {
+      await api.put("/notifications/read-all");
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    } catch (err) {
+      // Fallback to individual updates if bulk endpoint fails
+      const unread = notifications.filter((n) => !n.isRead);
+      await Promise.all(
+        unread.map((n) => api.put(`/notifications/${n._id}/read`))
+      );
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    }
+  };
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  if (loading)
+    return (
+      <div className="notifications-page">
+        <p>Loading...</p>
+      </div>
+    );
 
   return (
     <div className="notifications-page">
       <div className="notifications-container">
         <div className="notifications-header">
-          <h2>Notifications</h2>
+          <div className="notifications-title">
+            <h2>Notifications</h2>
+            {unreadCount > 0 && (
+              <span className="unread-count">{unreadCount} unread</span>
+            )}
+          </div>
+          {unreadCount > 0 && (
+            <button className="btn-mark-all-read" onClick={markAllRead}>
+              Mark All as Read
+            </button>
+          )}
         </div>
 
-        {notifications.length === 0 && (
+        {error && <div className="error-message">{error}</div>}
+
+        {notifications.length === 0 && !error && (
           <div className="no-notifications">
             <h3>No notifications</h3>
             <p>You're all caught up!</p>
@@ -36,30 +87,32 @@ const Notifications = () => {
               key={n._id}
               className={`notification-card ${!n.isRead ? "unread" : ""}`}
             >
-              <div className="notification-header">
-                {!n.isRead && (
-                  <span
-                    className="notification-badge"
-                    style={{
-                      backgroundColor: "var(--primary-color)",
-                      color: "white",
-                    }}
-                  >
-                    New
+              <div className="notification-content">
+                <div className="notification-header">
+                  <span className={`notification-type ${n.type}`}>
+                    {n.type === "booking" && "📋 Booking Request"}
+                    {n.type === "booking_status" && "📬 Booking Update"}
+                    {n.type === "review" && "⭐ New Review"}
                   </span>
-                )}
+                  {!n.isRead && <span className="notification-badge">New</span>}
+                </div>
+                <p className="notification-message">{n.message}</p>
+                <span className="notification-time">
+                  {new Date(n.createdAt).toLocaleDateString()} at{" "}
+                  {new Date(n.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
               </div>
-              <p className="notification-message">{n.message}</p>
               {!n.isRead && (
-                <div className="notification-footer">
-                  <div className="notification-actions">
-                    <button
-                      className="btn-mark-read"
-                      onClick={() => markRead(n._id)}
-                    >
-                      Mark as read
-                    </button>
-                  </div>
+                <div className="notification-actions">
+                  <button
+                    className="btn-mark-read"
+                    onClick={() => markRead(n._id)}
+                  >
+                    Mark as Read
+                  </button>
                 </div>
               )}
             </div>
