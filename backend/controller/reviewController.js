@@ -59,26 +59,29 @@ const createReview = async (req, res) => {
 // Get reviews for an offer
 const getReviewsByOffer = async (req, res) => {
     try {
-       const reviews = await Review.find({ offer: req.params.offerId  }).populate('user', 'name email');
-       res.json(reviews); 
+        const reviews = await Review.find({ offer: req.params.offerId })
+            .populate('user', 'name email')
+            .sort({ createdAt: -1 });
+        res.json(reviews);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
+// Update offer rating after review
 const updateOfferRating = async (offerId) => {
     const reviews = await Review.find({ offer: offerId });
     const numReviews = reviews.length;
-    const averageRating = 
-    numReviews === 0 ? 0 
-    : reviews.reduce((sum,r) => r.rating + sum, 0) / numReviews;
+    const averageRating = numReviews === 0 
+        ? 0 
+        : reviews.reduce((sum, r) => r.rating + sum, 0) / numReviews;
 
     await Offer.findByIdAndUpdate(offerId, {
         numReviews,
         averageRating: Number(averageRating.toFixed(1)),
     });
-
 };
+
 module.exports = {
     createReview,
     getReviewsByOffer,

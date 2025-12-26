@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
 import "./Profile.css";
 
 const Profile = () => {
   const { user } = useAuth();
-
   const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    api.get("/offers/myoffers").then((res) => setOffers(res.data));
-    // api.get("/reviews/offer/:offerId").then((res) => setReviews(res.data));
+    const fetchOffers = async () => {
+      try {
+        const { data } = await api.get("/offers/myoffers");
+        setOffers(data);
+      } catch (err) {
+        setError("Failed to load your offers");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOffers();
   }, []);
 
   const handleDeleteOffer = async (offerId) => {
@@ -21,9 +31,19 @@ const Profile = () => {
       await api.delete(`/offers/${offerId}`);
       setOffers((prev) => prev.filter((o) => o._id !== offerId));
     } catch (err) {
-      alert(err.response?.data?.message || "Delete failed");
+      alert(err.response?.data?.message || "Failed to delete offer");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="profile-page">
+        <div className="profile-container">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page">
@@ -33,12 +53,24 @@ const Profile = () => {
           <p>{user.email}</p>
         </div>
 
-        {/* MY OFFERS */}
+        {error && <div className="error-message">{error}</div>}
+
+        {/* My Offers Section */}
         <div className="profile-section">
-          <h2>My Offers</h2>
-          {offers.length === 0 && (
+          <div className="section-header">
+            <h2>My Offers</h2>
+            <Link to="/create-offer" className="btn-create">
+              + Create New Offer
+            </Link>
+          </div>
+
+          {offers.length === 0 && !error && (
             <div className="no-offers-message">
-              <p>You haven't created any offers.</p>
+              <p>You haven't created any offers yet.</p>
+              <p>
+                <Link to="/create-offer">Create your first offer</Link> to start
+                sharing your skills!
+              </p>
             </div>
           )}
 
@@ -50,18 +82,22 @@ const Profile = () => {
                 </h3>
                 <div className="offer-info">
                   <div className="offer-info-item">
-                    <strong>Price:</strong> {offer.price}
+                    <strong>Price:</strong> ${offer.price}
                   </div>
                   <div className="offer-info-item">
-                    ⭐ {offer.averageRating} ({offer.numReviews} reviews)
+                    ⭐ {offer.averageRating?.toFixed(1) || "0.0"} (
+                    {offer.numReviews} reviews)
                   </div>
                 </div>
 
                 <div className="offer-actions">
-                  <Link to={`/offers/${offer._id}/edit`}>
-                    <button>Edit</button>
+                  <Link to={`/offers/${offer._id}/edit`} className="btn-edit">
+                    Edit
                   </Link>
-                  <button onClick={() => handleDeleteOffer(offer._id)}>
+                  <button
+                    className="btn-delete"
+                    onClick={() => handleDeleteOffer(offer._id)}
+                  >
                     Delete
                   </button>
                 </div>
@@ -69,25 +105,6 @@ const Profile = () => {
             ))}
           </div>
         </div>
-
-        {/* MY REVIEWS
-                <div className="profile-section">
-                    <h2>My Reviews</h2>
-                    {reviews.length === 0 && <p>You haven't written any reviews.</p>}
-
-                    {reviews.map((review) => (
-                        <div key={review._id} className="offer-item">
-                            <p>
-                                <strong>Offer:</strong>{" "}
-                                <Link to={`/offers/${review.offer._id}`}>
-                                    {review.offer.title}
-                                </Link>
-                            </p>
-                            <p>⭐ {review.rating}</p>
-                            <p>{review.comment}</p>
-                        </div>
-                    ))}
-                </div> */}
       </div>
     </div>
   );

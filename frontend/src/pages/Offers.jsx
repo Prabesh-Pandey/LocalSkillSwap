@@ -1,76 +1,83 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
 import "./Offers.css";
 
 const Offers = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [offers, setOffers] = useState([]);
-  const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
-  const [minRating, setMinRating] = useState(
-    searchParams.get("minRating") || ""
-  );
-  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
-  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
-
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
-
   const { user } = useAuth();
 
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [bookingId, setBookingId] = useState(null);
+
   // Fetch offers whenever search params change
-  const fetchOffers = async () => {
-    const keywordParam = searchParams.get("keyword") || "";
-    const minRatingParam = searchParams.get("minRating") || "";
-    const minPriceParam = searchParams.get("minPrice") || "";
-    const maxPriceParam = searchParams.get("maxPrice") || "";
-    const pageParam = Number(searchParams.get("page")) || 1;
-
-    const { data } = await api.get("/offers", {
-      params: {
-        keyword: keywordParam,
-        minRating: minRatingParam,
-        minPrice: minPriceParam,
-        maxPrice: maxPriceParam,
-        page: pageParam,
-        limit: 5,
-      },
-    });
-    setOffers(data.offers);
-    setPages(data.pages || 1);
-    setPage(pageParam);
-  };
-
   useEffect(() => {
+    const fetchOffers = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const { data } = await api.get("/offers", {
+          params: {
+            keyword: searchParams.get("keyword") || "",
+            minRating: searchParams.get("minRating") || "",
+            minPrice: searchParams.get("minPrice") || "",
+            maxPrice: searchParams.get("maxPrice") || "",
+            page: Number(searchParams.get("page")) || 1,
+            limit: 6,
+          },
+        });
+        setOffers(data.offers);
+        setPages(data.pages || 1);
+        setPage(Number(searchParams.get("page")) || 1);
+      } catch (err) {
+        setError("Failed to load offers");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchOffers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const bookOffer = async (offerId) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    setBookingId(offerId);
     try {
       await api.post("/bookings", { offerId });
-      alert("Booking request sent!");
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to book offer");
+      alert("Booking request sent! The owner will be notified.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to book offer");
+    } finally {
+      setBookingId(null);
     }
   };
-
-  useEffect(() => {
-    setKeyword(searchParams.get("keyword") || "");
-    setMinRating(searchParams.get("minRating") || "");
-    setMinPrice(searchParams.get("minPrice") || "");
-    setMaxPrice(searchParams.get("maxPrice") || "");
-    setPage(Number(searchParams.get("page")) || 1);
-  }, [searchParams]);
 
   const handlePageChange = (newPage) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", newPage);
     navigate(`/offers?${params.toString()}`);
   };
+
+  if (loading) {
+    return (
+      <div className="offers-page">
+        <div className="container">
+          <p>Loading offers...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="offers-page">
@@ -80,13 +87,15 @@ const Offers = () => {
           <div className="offers-actions">
             {user && (
               <Link to="/create-offer" className="btn btn-primary">
-                Create Offer
+                + Create Offer
               </Link>
             )}
           </div>
         </div>
 
-        {offers.length === 0 ? (
+        {error && <div className="error-message">{error}</div>}
+
+        {offers.length === 0 && !error ? (
           <div className="no-offers">
             <h3>No offers found</h3>
             <p>Try adjusting your search filters or check back later</p>
@@ -97,12 +106,16 @@ const Offers = () => {
               {offers.map((offer) => (
                 <div key={offer._id} className="offer-card">
                   <h3>{offer.title}</h3>
-                  <p className="offer-description">{offer.description}</p>
+                  <p className="offer-description">
+                    {offer.description.length > 120
+                      ? `${offer.description.substring(0, 120)}...`
+                      : offer.description}
+                  </p>
                   <div className="offer-details">
                     <div className="offer-price">${offer.price}</div>
                     <div className="offer-rating">
-                      ⭐ {offer.averageRating.toFixed(1)} ({offer.numReviews}{" "}
-                      reviews)
+                      ⭐ {offer.averageRating?.toFixed(1) || "0.0"} (
+                      {offer.numReviews} reviews)
                     </div>
                     <p className="offer-owner">
                       By: <strong>{offer.user.name}</strong>
@@ -119,8 +132,9 @@ const Offers = () => {
                       <button
                         onClick={() => bookOffer(offer._id)}
                         className="btn btn-primary"
+                        disabled={bookingId === offer._id}
                       >
-                        Book Now
+                        {bookingId === offer._id ? "Booking..." : "Book Now"}
                       </button>
                     )}
                   </div>

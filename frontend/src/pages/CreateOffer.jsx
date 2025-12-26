@@ -11,23 +11,30 @@ const CreateOffer = () => {
   const [price, setPrice] = useState("");
   const [tags, setTags] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const offerData = {
-        title,
-        description,
+        title: title.trim(),
+        description: description.trim(),
         price: Number(price),
-        tags: tags.split(",").map((tag) => tag.trim()),
+        tags: tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
       };
 
       await api.post("/offers", offerData);
-      navigate("/profile"); // go to profile to see created offer
+      navigate("/profile");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to create offer");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,6 +55,8 @@ const CreateOffer = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                disabled={loading}
+                minLength={3}
               />
             </div>
 
@@ -58,6 +67,8 @@ const CreateOffer = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
+                disabled={loading}
+                minLength={10}
               />
               <small>Be specific about what you'll teach or help with</small>
             </div>
@@ -72,6 +83,7 @@ const CreateOffer = () => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
+                disabled={loading}
               />
               <small>Price per hour or session</small>
             </div>
@@ -83,18 +95,20 @@ const CreateOffer = () => {
                 placeholder="e.g., programming, javascript, react"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
+                disabled={loading}
               />
               <small>Separate tags with commas</small>
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn-submit">
-                Create Offer
+              <button type="submit" className="btn-submit" disabled={loading}>
+                {loading ? "Creating..." : "Create Offer"}
               </button>
               <button
                 type="button"
                 className="btn-cancel"
                 onClick={() => navigate("/profile")}
+                disabled={loading}
               >
                 Cancel
               </button>

@@ -8,27 +8,35 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   if (!user) {
-    return <p>Login to leave a review.</p>;
+    return (
+      <div className="review-form-container">
+        <p className="login-prompt">Please login to leave a review.</p>
+      </div>
+    );
   }
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       const { data } = await api.post("/reviews", {
         offerId,
-        rating,
-        comment,
+        rating: Number(rating),
+        comment: comment.trim(),
       });
 
       onReviewAdded((prev) => [data, ...prev]);
       setComment("");
       setRating(5);
     } catch (err) {
-      setError(err.response?.data?.message || "Cannot leave review");
+      setError(err.response?.data?.message || "Failed to submit review");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,16 +46,20 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
         <h3>Leave a Review</h3>
       </div>
 
-      <form className="review-form" onSubmit={submitHandler}>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <div className="error-message">{error}</div>}
 
+      <form className="review-form" onSubmit={submitHandler}>
         <div className="form-group">
           <label>Rating</label>
           <div className="rating-input">
-            <select value={rating} onChange={(e) => setRating(e.target.value)}>
-              {[1, 2, 3, 4, 5].map((r) => (
+            <select
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              disabled={loading}
+            >
+              {[5, 4, 3, 2, 1].map((r) => (
                 <option key={r} value={r}>
-                  {r}
+                  {r} Star{r !== 1 ? "s" : ""}
                 </option>
               ))}
             </select>
@@ -62,12 +74,18 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             required
+            disabled={loading}
+            minLength={5}
           />
         </div>
 
         <div className="review-form-actions">
-          <button className="btn-submit-review" type="submit">
-            Submit Review
+          <button
+            className="btn-submit-review"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit Review"}
           </button>
         </div>
       </form>
