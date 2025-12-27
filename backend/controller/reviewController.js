@@ -18,15 +18,15 @@ const createReview = async (req, res) => {
             return res.status(400).json({ message: 'You cannot review your own offer' });
         }
 
-        // condition (review only accepted offers)
+        // Reviews are only allowed for completed bookings
         const booking = await Booking.findOne({ 
             offer: offerId, 
             bookedBy: req.user._id,
-            status: 'accepted' 
+            status: 'completed' 
         });
 
         if (!booking) {
-            return res.status(400).json({ message: 'You can only review offers you have booked and were accepted' });
+            return res.status(400).json({ message: 'You can only review offers after the booking has been completed by both parties' });
         }
         
         const review = await Review.create({
