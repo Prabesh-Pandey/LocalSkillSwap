@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import { Calendar, Mail, Star } from "lucide-react";
 import "./Notifications.css";
 
 const Notifications = () => {
@@ -90,9 +91,21 @@ const Notifications = () => {
               <div className="notification-content">
                 <div className="notification-header">
                   <span className={`notification-type ${n.type}`}>
-                    {n.type === "booking" && "📋 Booking Request"}
-                    {n.type === "booking_status" && "📬 Booking Update"}
-                    {n.type === "review" && "⭐ New Review"}
+                    {n.type === "booking" && (
+                      <>
+                        <Calendar size={14} /> Booking Request
+                      </>
+                    )}
+                    {n.type === "booking_status" && (
+                      <>
+                        <Mail size={14} /> Booking Update
+                      </>
+                    )}
+                    {n.type === "review" && (
+                      <>
+                        <Star size={14} /> New Review
+                      </>
+                    )}
                   </span>
                   {!n.isRead && <span className="notification-badge">New</span>}
                 </div>

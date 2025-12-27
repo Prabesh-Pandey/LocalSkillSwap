@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import ReviewForm from "../components/ReviewForm";
 import { useAuth } from "../context/AuthContext";
+import { Star, Check } from "lucide-react";
 import "./OfferDetails.css";
 
 const OfferDetails = () => {
@@ -119,7 +120,8 @@ const OfferDetails = () => {
               </div>
               <div className="offer-meta-item">
                 <span className="offer-rating-large">
-                  ⭐ {offer.averageRating?.toFixed(1) || "0.0"}
+                  <Star size={20} fill="#f4a425" stroke="#f4a425" />{" "}
+                  {offer.averageRating?.toFixed(1) || "0.0"}
                 </span>
                 <small>({offer.numReviews} reviews)</small>
               </div>
@@ -169,7 +171,7 @@ const OfferDetails = () => {
                 {user ? (
                   hasBooked ? (
                     <button className="btn btn-secondary" disabled>
-                      ✓ Already Booked
+                      <Check size={16} /> Already Booked
                     </button>
                   ) : (
                     <button
@@ -210,7 +212,9 @@ const OfferDetails = () => {
                 <div className="review-header">
                   <strong className="review-author">{review.user.name}</strong>
                   <span className="review-rating">
-                    {"⭐".repeat(review.rating)}
+                    {[...Array(review.rating)].map((_, i) => (
+                      <Star key={i} size={14} fill="#f4a425" stroke="#f4a425" />
+                    ))}
                   </span>
                 </div>
                 <p className="review-comment">{review.comment}</p>

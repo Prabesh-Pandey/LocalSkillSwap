@@ -200,8 +200,11 @@
 }
 
 .no-bookings .empty-icon {
-  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 1rem;
+  color: #9ca3af;
 }
 
 .no-bookings .btn-browse {
@@ -315,6 +318,15 @@
   font-size: 0.875rem;
   display: flex;
   align-items: center;
+  gap: 0.35rem;
+}
+
+/* Status message icon alignment */
+.booking-status-message p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 }
 
 .no-bookings a {

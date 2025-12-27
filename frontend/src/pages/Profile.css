@@ -106,7 +106,14 @@
 }
 
 .stat-icon {
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  color: white;
   flex-shrink: 0;
 }
 
@@ -248,8 +255,11 @@
 }
 
 .empty-icon {
-  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 1rem;
+  color: #9ca3af;
 }
 
 .no-offers-message h3 {
@@ -343,6 +353,9 @@
 }
 
 .offer-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   color: #f4a425;
   font-weight: 600;
 }
@@ -435,20 +448,23 @@
   justify-content: center;
   border-radius: 50%;
   background: #e9ecef;
-  font-size: 1.2rem;
+  color: #6b7280;
   flex-shrink: 0;
 }
 
 .activity-icon.pending {
   background: #fff3cd;
+  color: #92400e;
 }
 
 .activity-icon.accepted {
   background: #d4edda;
+  color: #065f46;
 }
 
 .activity-icon.rejected {
   background: #f8d7da;
+  color: #991b1b;
 }
 
 .activity-content {

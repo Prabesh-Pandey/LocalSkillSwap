@@ -170,7 +170,10 @@ const OwnerBookings = () => {
         {/* Empty State */}
         {bookings.length === 0 && !error && (
           <div className="no-bookings">
-            <h3>📭 No booking requests yet</h3>
+            <div className="empty-icon">
+              <Inbox size={64} strokeWidth={1} />
+            </div>
+            <h3>No booking requests yet</h3>
             <p>
               When someone books one of your offers, their request will appear
               here.

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { Star } from "lucide-react";
 import "./Offers.css";
 
 const Offers = () => {
@@ -114,7 +115,8 @@ const Offers = () => {
                   <div className="offer-details">
                     <div className="offer-price">${offer.price}</div>
                     <div className="offer-rating">
-                      ⭐ {offer.averageRating?.toFixed(1) || "0.0"} (
+                      <Star size={14} fill="#f4a425" stroke="#f4a425" />{" "}
+                      {offer.averageRating?.toFixed(1) || "0.0"} (
                       {offer.numReviews} reviews)
                     </div>
                     <p className="offer-owner">

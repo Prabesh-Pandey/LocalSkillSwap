@@ -37,6 +37,12 @@ body {
   min-height: 100vh;
 }
 
+/* Lucide Icons - Global inline styling */
+svg.lucide {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);

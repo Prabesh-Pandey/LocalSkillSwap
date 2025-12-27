@@ -2,6 +2,15 @@ import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import {
+  Package,
+  Star,
+  MessageSquare,
+  Bell,
+  Plus,
+  Send,
+  Inbox,
+} from "lucide-react";
 import "./Profile.css";
 
 const Profile = () => {
@@ -123,28 +132,36 @@ const Profile = () => {
         {/* Stats Cards */}
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-icon">📦</div>
+            <div className="stat-icon">
+              <Package size={28} />
+            </div>
             <div className="stat-content">
               <span className="stat-value">{stats.totalOffers}</span>
               <span className="stat-label">Active Offers</span>
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">⭐</div>
+            <div className="stat-icon">
+              <Star size={28} />
+            </div>
             <div className="stat-content">
               <span className="stat-value">{stats.avgRating}</span>
               <span className="stat-label">Avg Rating</span>
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">💬</div>
+            <div className="stat-icon">
+              <MessageSquare size={28} />
+            </div>
             <div className="stat-content">
               <span className="stat-value">{stats.totalReviews}</span>
               <span className="stat-label">Reviews</span>
             </div>
           </div>
           <div className="stat-card highlight">
-            <div className="stat-icon">🔔</div>
+            <div className="stat-icon">
+              <Bell size={28} />
+            </div>
             <div className="stat-content">
               <span className="stat-value">{stats.pendingRequests}</span>
               <span className="stat-label">Pending Requests</span>
@@ -162,7 +179,7 @@ const Profile = () => {
         {/* Quick Actions */}
         <div className="quick-actions">
           <Link to="/create-offer" className="action-btn primary">
-            <span className="action-icon">+</span>
+            <Plus size={18} />
             Create New Offer
           </Link>
         </div>
@@ -188,7 +205,9 @@ const Profile = () => {
           <div className="profile-section">
             {offers.length === 0 ? (
               <div className="no-offers-message">
-                <div className="empty-icon">📦</div>
+                <div className="empty-icon">
+                  <Package size={64} strokeWidth={1} />
+                </div>
                 <h3>No offers yet</h3>
                 <p>Start sharing your skills with the community!</p>
                 <Link to="/create-offer" className="btn-create">
@@ -212,7 +231,8 @@ const Profile = () => {
                     </p>
                     <div className="offer-meta">
                       <span className="offer-rating">
-                        ⭐ {offer.averageRating?.toFixed(1) || "0.0"}
+                        <Star size={14} fill="#f4a425" stroke="#f4a425" />{" "}
+                        {offer.averageRating?.toFixed(1) || "0.0"}
                       </span>
                       <span className="offer-reviews">
                         {offer.numReviews} review
@@ -266,7 +286,7 @@ const Profile = () => {
                   return (
                     <div key={booking._id} className="activity-item">
                       <div className={`activity-icon ${booking.status}`}>
-                        {isSent ? "📤" : "📥"}
+                        {isSent ? <Send size={18} /> : <Inbox size={18} />}
                       </div>
                       <div className="activity-content">
                         <p className="activity-text">

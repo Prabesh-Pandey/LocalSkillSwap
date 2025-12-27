@@ -62,6 +62,9 @@
 .rating-display {
   color: var(--warning-color);
   font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
 }
 
 .form-group textarea {

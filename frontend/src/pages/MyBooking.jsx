@@ -1,6 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import api from "../api/axios";
 import { Link } from "react-router-dom";
+import {
+  ClipboardList,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 import "./Bookings.css";
 
 const MyBookings = () => {
@@ -155,7 +162,9 @@ const MyBookings = () => {
         {/* Empty State */}
         {bookings.length === 0 && !error && (
           <div className="no-bookings">
-            <div className="empty-icon">📋</div>
+            <div className="empty-icon">
+              <ClipboardList size={64} strokeWidth={1} />
+            </div>
             <h3>No bookings yet</h3>
             <p>You haven't made any booking requests.</p>
             <Link to="/offers" className="btn-browse">
@@ -237,7 +246,7 @@ const MyBookings = () => {
               {booking.status === "accepted" && (
                 <div className="booking-status-message success">
                   <p>
-                    ✔ Booking accepted — you can now{" "}
+                    <CheckCircle size={16} /> Booking accepted — you can now{" "}
                     <Link to={`/offers/${booking.offer?._id}`}>
                       leave a review
                     </Link>
@@ -247,19 +256,25 @@ const MyBookings = () => {
 
               {booking.status === "rejected" && (
                 <div className="booking-status-message error">
-                  <p>✖ Booking was rejected by the owner</p>
+                  <p>
+                    <XCircle size={16} /> Booking was rejected by the owner
+                  </p>
                 </div>
               )}
 
               {booking.status === "cancelled" && (
                 <div className="booking-status-message warning">
-                  <p>⚠ You cancelled this booking</p>
+                  <p>
+                    <AlertCircle size={16} /> You cancelled this booking
+                  </p>
                 </div>
               )}
 
               {booking.status === "pending" && (
                 <div className="booking-actions">
-                  <span className="waiting-text">⏳ Waiting for response</span>
+                  <span className="waiting-text">
+                    <Clock size={16} /> Waiting for response
+                  </span>
                   <button
                     className="btn-cancel-booking"
                     onClick={() => cancelBooking(booking._id)}

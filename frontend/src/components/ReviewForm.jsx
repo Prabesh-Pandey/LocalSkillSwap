@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
+import { Star } from "lucide-react";
 import "./ReviewForm.css";
 
 const ReviewForm = ({ offerId, onReviewAdded }) => {
@@ -63,7 +64,11 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
                 </option>
               ))}
             </select>
-            <span className="rating-display">{"⭐".repeat(rating)}</span>
+            <span className="rating-display">
+              {[...Array(Number(rating))].map((_, i) => (
+                <Star key={i} size={18} fill="#f4a425" stroke="#f4a425" />
+              ))}
+            </span>
           </div>
         </div>
 

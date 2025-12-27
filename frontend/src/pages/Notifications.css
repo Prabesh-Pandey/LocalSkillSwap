@@ -105,6 +105,9 @@
   font-weight: 600;
   background-color: var(--bg-secondary);
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .notification-type.booking {

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
+import { Handshake, Star } from "lucide-react";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -61,7 +62,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
-          🤝 SkillSwap
+          <Handshake size={24} /> SkillSwap
         </Link>
 
         {/* SEARCH */}
@@ -78,10 +79,10 @@ const Navbar = () => {
               value={minRating}
               onChange={(e) => setMinRating(e.target.value)}
             >
-              <option value="">Any ⭐</option>
-              <option value="4">4+ ⭐</option>
-              <option value="3">3+ ⭐</option>
-              <option value="2">2+ ⭐</option>
+              <option value="">Any ★</option>
+              <option value="4">4+ ★</option>
+              <option value="3">3+ ★</option>
+              <option value="2">2+ ★</option>
             </select>
 
             <button type="submit">Search</button>

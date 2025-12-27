@@ -80,6 +80,9 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .offer-body {
@@ -259,6 +262,9 @@
 .review-rating {
   color: var(--warning-color);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
 }
 
 .review-comment {
