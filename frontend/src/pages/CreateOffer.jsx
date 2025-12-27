@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { PlusCircle, X, FileText, DollarSign, Tag } from "lucide-react";
 import "./CreateOffer.css";
 
 const CreateOffer = () => {
@@ -42,13 +43,21 @@ const CreateOffer = () => {
     <div className="create-offer-page">
       <div className="create-offer-container">
         <div className="create-offer-card">
-          <h2>Create New Offer</h2>
+          <div className="form-header">
+            <div className="form-icon">
+              <PlusCircle size={28} />
+            </div>
+            <h2>Create New Offer</h2>
+            <p>Share your skills and expertise with others</p>
+          </div>
 
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={submitHandler} className="create-offer-form">
             <div className="form-group">
-              <label>Title</label>
+              <label>
+                <FileText size={16} /> Title
+              </label>
               <input
                 type="text"
                 placeholder="e.g., Web Development Tutoring"
@@ -61,7 +70,9 @@ const CreateOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Description</label>
+              <label>
+                <FileText size={16} /> Description
+              </label>
               <textarea
                 placeholder="Describe what you're offering..."
                 value={description}
@@ -74,7 +85,9 @@ const CreateOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Price ($)</label>
+              <label>
+                <DollarSign size={16} /> Price ($)
+              </label>
               <input
                 type="number"
                 placeholder="0.00"
@@ -89,7 +102,9 @@ const CreateOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Tags (Optional)</label>
+              <label>
+                <Tag size={16} /> Tags (Optional)
+              </label>
               <input
                 type="text"
                 placeholder="e.g., programming, javascript, react"
@@ -102,6 +117,7 @@ const CreateOffer = () => {
 
             <div className="form-actions">
               <button type="submit" className="btn-submit" disabled={loading}>
+                <PlusCircle size={18} />
                 {loading ? "Creating..." : "Create Offer"}
               </button>
               <button
@@ -110,7 +126,7 @@ const CreateOffer = () => {
                 onClick={() => navigate("/profile")}
                 disabled={loading}
               >
-                Cancel
+                <X size={18} /> Cancel
               </button>
             </div>
           </form>

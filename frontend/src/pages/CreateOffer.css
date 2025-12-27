@@ -1,6 +1,7 @@
 .create-offer-page {
   padding: 2rem 0;
   min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
 }
 
 .create-offer-container {
@@ -11,17 +12,41 @@
 
 .create-offer-card {
   background-color: white;
-  border-radius: var(--radius);
+  border-radius: 16px;
   padding: 2.5rem;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color);
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
 .create-offer-card h2 {
   color: var(--text-primary);
   font-size: 1.75rem;
-  margin-bottom: 2rem;
-  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.form-header p {
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 .create-offer-form {
@@ -40,16 +65,24 @@
   font-weight: 500;
   color: var(--text-primary);
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group label svg {
+  color: var(--text-secondary);
 }
 
 .form-group input,
 .form-group textarea {
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
   font-size: 1rem;
   transition: all 0.2s;
   font-family: inherit;
+  background: #fafafa;
 }
 
 .form-group textarea {
@@ -62,6 +95,7 @@
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background: white;
 }
 
 .form-group small {
@@ -78,35 +112,47 @@
 
 .form-actions button {
   flex: 1;
-  padding: 0.875rem;
+  padding: 1rem;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: var(--radius);
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .btn-submit {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   border: none;
 }
 
 .btn-submit:hover {
-  background-color: var(--primary-hover);
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+}
+
+.btn-submit:disabled {
+  background: var(--text-secondary);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-cancel {
   background-color: transparent;
   color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
 }
 
 .btn-cancel:hover {
   border-color: var(--text-primary);
   color: var(--text-primary);
+  background: #f5f7fa;
 }
 
 @media (max-width: 768px) {

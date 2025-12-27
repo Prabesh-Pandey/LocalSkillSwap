@@ -2,7 +2,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
-import { Handshake, Star } from "lucide-react";
+import {
+  Handshake,
+  MessageSquare,
+  Bell,
+  ClipboardList,
+  Inbox,
+  User,
+  LogOut,
+  LogIn,
+  UserPlus,
+  Search,
+} from "lucide-react";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -15,24 +26,29 @@ const Navbar = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
-  // Fetch unread notification count
+  // Fetch unread notification and message counts
   useEffect(() => {
-    const fetchUnreadCount = async () => {
+    const fetchUnreadCounts = async () => {
       if (user) {
         try {
-          const { data } = await api.get("/notifications");
-          const unread = data.filter((n) => !n.isRead).length;
+          const [notifRes, msgRes] = await Promise.all([
+            api.get("/notifications"),
+            api.get("/messages/unread"),
+          ]);
+          const unread = notifRes.data.filter((n) => !n.isRead).length;
           setUnreadCount(unread);
-        } catch (err) {
+          setUnreadMessages(msgRes.data.unreadCount || 0);
+        } catch {
           // Ignore errors
         }
       }
     };
 
-    fetchUnreadCount();
-    // Poll every 30 seconds for new notifications
-    const interval = setInterval(fetchUnreadCount, 30000);
+    fetchUnreadCounts();
+    // Poll every 30 seconds for new notifications/messages
+    const interval = setInterval(fetchUnreadCounts, 30000);
     return () => clearInterval(interval);
   }, [user]);
 
@@ -85,7 +101,9 @@ const Navbar = () => {
               <option value="2">2+ ★</option>
             </select>
 
-            <button type="submit">Search</button>
+            <button type="submit">
+              <Search size={16} /> Search
+            </button>
             <button
               type="button"
               className="btn-filters"
@@ -132,28 +150,45 @@ const Navbar = () => {
         <div className="navbar-links">
           {user ? (
             <>
-              <span className="navbar-user">Hello, {user.name}</span>
-              <span className="navbar-divider">|</span>
               <Link to="/notifications" className="notification-link">
-                Notifications
+                <Bell size={16} /> Notifications
                 {unreadCount > 0 && (
                   <span className="notification-badge">{unreadCount}</span>
                 )}
               </Link>
               <span className="navbar-divider">|</span>
-              <Link to="/my-bookings">My Bookings</Link>
+              <Link to="/messages" className="notification-link">
+                <MessageSquare size={16} /> Messages
+                {unreadMessages > 0 && (
+                  <span className="notification-badge">{unreadMessages}</span>
+                )}
+              </Link>
               <span className="navbar-divider">|</span>
-              <Link to="/owner-bookings">Requests</Link>
+              <Link to="/my-bookings">
+                <ClipboardList size={16} /> My Bookings
+              </Link>
               <span className="navbar-divider">|</span>
-              <Link to="/profile">Profile</Link>
+              <Link to="/owner-bookings">
+                <Inbox size={16} /> Requests
+              </Link>
               <span className="navbar-divider">|</span>
-              <button onClick={logout}>Logout</button>
+              <Link to="/profile">
+                <User size={16} /> Profile
+              </Link>
+              <span className="navbar-divider">|</span>
+              <button onClick={logout}>
+                <LogOut size={16} /> Logout
+              </button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
+              <Link to="/login">
+                <LogIn size={16} /> Login
+              </Link>
               <span className="navbar-divider">|</span>
-              <Link to="/register">Register</Link>
+              <Link to="/register">
+                <UserPlus size={16} /> Register
+              </Link>
             </>
           )}
         </div>

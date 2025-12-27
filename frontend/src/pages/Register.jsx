@@ -1,6 +1,16 @@
 import { useState, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  UserPlus,
+  User,
+  Mail,
+  Lock,
+  Check,
+  X,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import "./Login.css";
 
 const Register = () => {
@@ -94,16 +104,23 @@ const Register = () => {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-card">
-          <h2>Create Account</h2>
-          <p className="auth-subtitle">
-            Join SkillSwap and start learning today
-          </p>
+          <div className="auth-header">
+            <div className="auth-icon">
+              <UserPlus size={32} />
+            </div>
+            <h2>Create Account</h2>
+            <p className="auth-subtitle">
+              Join SkillSwap and start learning today
+            </p>
+          </div>
 
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={submitHandler} className="auth-form">
             <div className="form-group">
-              <label>Full Name</label>
+              <label>
+                <User size={16} /> Full Name
+              </label>
               <input
                 type="text"
                 placeholder="Enter your full name"
@@ -116,7 +133,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Email</label>
+              <label>
+                <Mail size={16} /> Email
+              </label>
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -128,7 +147,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Password</label>
+              <label>
+                <Lock size={16} /> Password
+              </label>
               <div className="password-input-wrapper">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -145,7 +166,7 @@ const Register = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
 
@@ -210,7 +231,9 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Confirm Password</label>
+              <label>
+                <Lock size={16} /> Confirm Password
+              </label>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Confirm your password"
@@ -228,12 +251,12 @@ const Register = () => {
               />
               {passwordsMatch && (
                 <span className="input-feedback success">
-                  ✓ Passwords match
+                  <Check size={14} /> Passwords match
                 </span>
               )}
               {passwordsMismatch && (
                 <span className="input-feedback error">
-                  ✗ Passwords do not match
+                  <X size={14} /> Passwords do not match
                 </span>
               )}
             </div>
@@ -243,6 +266,7 @@ const Register = () => {
               className="auth-submit-btn"
               disabled={loading || passwordsMismatch}
             >
+              <UserPlus size={18} />
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>

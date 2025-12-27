@@ -3,7 +3,15 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import ReviewForm from "../components/ReviewForm";
 import { useAuth } from "../context/AuthContext";
-import { Star, Check } from "lucide-react";
+import Loading from "../components/Loading";
+import {
+  Star,
+  Check,
+  MessageCircle,
+  Trash2,
+  Edit,
+  ArrowLeft,
+} from "lucide-react";
 import "./OfferDetails.css";
 
 const OfferDetails = () => {
@@ -86,7 +94,7 @@ const OfferDetails = () => {
     return (
       <div className="offer-details-page">
         <div className="offer-details-container">
-          <p>Loading...</p>
+          <Loading message="Loading offer details..." />
         </div>
       </div>
     );
@@ -98,7 +106,7 @@ const OfferDetails = () => {
         <div className="offer-details-container">
           <div className="error-message">{error || "Offer not found"}</div>
           <Link to="/offers" className="btn btn-outline">
-            Back to Offers
+            <ArrowLeft size={16} /> Back to Offers
           </Link>
         </div>
       </div>
@@ -150,6 +158,16 @@ const OfferDetails = () => {
             <h3>Offered by</h3>
             <p className="owner-name">{offer.user.name}</p>
             <p className="owner-email">{offer.user.email}</p>
+            {user && !isOwner && (
+              <Link
+                to={`/messages?userId=${
+                  offer.user._id
+                }&userName=${encodeURIComponent(offer.user.name)}`}
+                className="btn btn-message"
+              >
+                <MessageCircle size={16} /> Message Owner
+              </Link>
+            )}
           </div>
 
           {/* BOOKING/OWNER ACTIONS */}
@@ -160,10 +178,10 @@ const OfferDetails = () => {
                   to={`/offers/${offer._id}/edit`}
                   className="btn btn-primary"
                 >
-                  Edit Offer
+                  <Edit size={16} /> Edit Offer
                 </Link>
                 <button className="btn btn-danger" onClick={deleteOffer}>
-                  Delete Offer
+                  <Trash2 size={16} /> Delete Offer
                 </button>
               </>
             ) : (

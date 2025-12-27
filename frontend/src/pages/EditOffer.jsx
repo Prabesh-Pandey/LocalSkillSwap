@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import Loading from "../components/Loading";
+import { Save, X, FileText, DollarSign, Tag, Edit3 } from "lucide-react";
 import "./CreateOffer.css";
 
 const EditOffer = () => {
@@ -59,7 +61,9 @@ const EditOffer = () => {
   if (loading)
     return (
       <div className="create-offer-page">
-        <p>Loading...</p>
+        <div className="create-offer-container">
+          <Loading message="Loading offer details..." />
+        </div>
       </div>
     );
 
@@ -67,13 +71,21 @@ const EditOffer = () => {
     <div className="create-offer-page">
       <div className="create-offer-container">
         <div className="create-offer-card">
-          <h2>Edit Offer</h2>
+          <div className="form-header">
+            <div className="form-icon">
+              <Edit3 size={28} />
+            </div>
+            <h2>Edit Offer</h2>
+            <p>Update your offer details</p>
+          </div>
 
           {error && <div className="error-message">{error}</div>}
 
           <form className="create-offer-form" onSubmit={submitHandler}>
             <div className="form-group">
-              <label>Title</label>
+              <label>
+                <FileText size={16} /> Title
+              </label>
               <input
                 type="text"
                 value={title}
@@ -85,7 +97,9 @@ const EditOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Description</label>
+              <label>
+                <FileText size={16} /> Description
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -96,7 +110,9 @@ const EditOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Price ($)</label>
+              <label>
+                <DollarSign size={16} /> Price ($)
+              </label>
               <input
                 type="number"
                 value={price}
@@ -111,7 +127,9 @@ const EditOffer = () => {
             </div>
 
             <div className="form-group">
-              <label>Tags (Optional)</label>
+              <label>
+                <Tag size={16} /> Tags (Optional)
+              </label>
               <input
                 type="text"
                 value={tags}
@@ -128,7 +146,8 @@ const EditOffer = () => {
                 type="submit"
                 disabled={submitting}
               >
-                {submitting ? "Updating..." : "Update"}
+                <Save size={18} />
+                {submitting ? "Updating..." : "Update Offer"}
               </button>
               <button
                 className="btn-cancel"
@@ -136,7 +155,7 @@ const EditOffer = () => {
                 onClick={() => navigate(`/offers/${id}`)}
                 disabled={submitting}
               >
-                Cancel
+                <X size={18} /> Cancel
               </button>
             </div>
           </form>

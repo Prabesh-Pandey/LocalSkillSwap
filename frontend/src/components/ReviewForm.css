@@ -17,6 +17,9 @@
   color: var(--text-primary);
   font-size: 1.25rem;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .review-form {
@@ -105,15 +108,19 @@
 }
 
 .btn-submit-review {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .btn-submit-review:hover:not(:disabled) {
-  background-color: var(--primary-hover);
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
 }
 
 .btn-submit-review:disabled {

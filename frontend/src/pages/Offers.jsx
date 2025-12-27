@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { Star } from "lucide-react";
+import Loading from "../components/Loading";
+import { Star, Plus, Search } from "lucide-react";
 import "./Offers.css";
 
 const Offers = () => {
@@ -74,7 +75,7 @@ const Offers = () => {
     return (
       <div className="offers-page">
         <div className="container">
-          <p>Loading offers...</p>
+          <Loading message="Loading available skills..." />
         </div>
       </div>
     );
@@ -88,7 +89,7 @@ const Offers = () => {
           <div className="offers-actions">
             {user && (
               <Link to="/create-offer" className="btn btn-primary">
-                + Create Offer
+                <Plus size={18} /> Create Offer
               </Link>
             )}
           </div>

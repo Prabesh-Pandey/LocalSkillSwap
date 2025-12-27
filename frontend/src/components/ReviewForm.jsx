@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
-import { Star } from "lucide-react";
+import { Star, Send, MessageSquare } from "lucide-react";
 import "./ReviewForm.css";
 
 const ReviewForm = ({ offerId, onReviewAdded }) => {
@@ -44,7 +44,9 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
   return (
     <div className="review-form-container">
       <div className="review-form-header">
-        <h3>Leave a Review</h3>
+        <h3>
+          <MessageSquare size={20} /> Leave a Review
+        </h3>
       </div>
 
       {error && <div className="error-message">{error}</div>}
@@ -90,6 +92,7 @@ const ReviewForm = ({ offerId, onReviewAdded }) => {
             type="submit"
             disabled={loading}
           >
+            <Send size={16} />
             {loading ? "Submitting..." : "Submit Review"}
           </button>
         </div>

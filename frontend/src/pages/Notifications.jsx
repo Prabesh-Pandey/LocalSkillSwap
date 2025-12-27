@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { Calendar, Mail, Star } from "lucide-react";
+import Loading from "../components/Loading";
+import { Calendar, Mail, Star, Bell, CheckCheck } from "lucide-react";
 import "./Notifications.css";
 
 const Notifications = () => {
@@ -52,7 +53,9 @@ const Notifications = () => {
   if (loading)
     return (
       <div className="notifications-page">
-        <p>Loading...</p>
+        <div className="notifications-container">
+          <Loading message="Loading notifications..." />
+        </div>
       </div>
     );
 

@@ -1,6 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
+import Loading from "../components/Loading";
+import { Inbox, CheckCircle, XCircle, Clock, Mail, User } from "lucide-react";
 import "./Bookings.css";
 
 const OwnerBookings = () => {
@@ -97,7 +99,7 @@ const OwnerBookings = () => {
     return (
       <div className="bookings-page">
         <div className="bookings-container">
-          <p>Loading booking requests...</p>
+          <Loading message="Loading booking requests..." />
         </div>
       </div>
     );
